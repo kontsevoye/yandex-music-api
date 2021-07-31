@@ -135,7 +135,6 @@ export default class YMApi {
   search(query: string, options: SearchOptions = {}): Promise<SearchResponse> {
     const type = !options.type ? "all" : options.type;
     const page = String(!options.page ? 0 : options.page);
-    const pageSize = String(!options.page ? 0 : options.pageSize);
     const nococrrect = String(
       options.nococrrect == null ? false : options.nococrrect
     );
@@ -146,9 +145,12 @@ export default class YMApi {
         type,
         text: query,
         page,
-        pageSize,
         nococrrect,
       });
+
+    if (options.pageSize !== void 0) {
+      request.addQuery({ pageSize: String(options.pageSize) });
+    }
 
     return this.httpClient.get(request) as Promise<SearchResponse>;
   }
@@ -496,14 +498,16 @@ export default class YMApi {
     options: SearchOptions = {}
   ): Promise<ArtistTracksResponse> {
     const page = String(!options.page ? 0 : options.page);
-    const pageSize = String(!options.pageSize ? 0 : options.pageSize);
     const request = apiRequest()
       .setPath(`/artists/${artistId}/tracks`)
       .addHeaders(this.getAuthHeader())
       .setQuery({
         page,
-        pageSize,
       });
+
+    if (options.pageSize !== void 0) {
+      request.addQuery({ pageSize: String(options.pageSize) });
+    }
 
     return this.httpClient.get(request) as Promise<ArtistTracksResponse>;
   }
