@@ -499,3 +499,17 @@ export type Pager = {
   perPage: number;
   total: number;
 };
+
+type TrackMeta = {
+  id: string;
+  albumId: string;
+  timestamp: string;
+};
+
+export type LikedTracks = {
+  library: {
+    revision: number;
+    uid: number;
+    tracks: TrackMeta[];
+  };
+};
