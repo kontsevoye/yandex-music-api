@@ -272,6 +272,7 @@ type ArtistCounts = {
 type Region = "RUSSIA_PREMIUM" | "RUSSIA" | string;
 type AlbumType = "compilation" | string;
 type TrackPosition = { volume: number; index: number };
+type Label = { id: number; name: string } | string;
 
 export type AlbumVolume = Array<Track>;
 export type Album = {
@@ -287,8 +288,12 @@ export type Album = {
   trackPosition: TrackPosition;
   artists: Array<Artist>;
   availableRegions: Array<Region>;
-  labels: Array<string>;
+  labels: Array<Label>;
   volumes?: Array<AlbumVolume>;
+  year?: number;
+  originalReleaseYear: number;
+  likesCount?: number;
+  regions?: Array<Region>;
 };
 export type AlbumWithTracks = Required<Album>;
 
@@ -344,7 +349,7 @@ export type SearchResponse = {
   type: string;
   page: number;
   perPage: number;
-  test: string;
+  text: string;
   searchRequestId: string;
   artists?: {
     total: number;
@@ -363,6 +368,12 @@ export type SearchResponse = {
     perPage: number;
     order: number;
     results: Array<Track>;
+  };
+  best?: {
+    type: 'track' | 'artist' | 'album' | 'playlist' | 'video';
+    results: Array<Track | Artist | Album | Playlist | Video>;
+    misspellCorrected: boolean;
+    nocorrect: boolean;
   };
 };
 
