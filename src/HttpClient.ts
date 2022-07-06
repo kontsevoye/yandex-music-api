@@ -5,6 +5,7 @@ import {
   Response,
   RequestInterface,
 } from "./types";
+import ApiError from "./ApiError";
 
 export default class HttpClient implements HttpClientInterface {
   async _sendRequestAxios(
@@ -31,13 +32,12 @@ export default class HttpClient implements HttpClientInterface {
       } else {
         return data;
       }
-    } catch (e) {
-      console.error({
-        status: e.response.status,
-        headers: e.response.headers,
-        data: e.response.data,
-      });
-      throw new Error(`Request failed: ${e.message}`);
+    } catch (e:any) {
+	  if (e.response.data?.error) {
+		throw new ApiError(e.response.data.error)
+	  } else {
+		throw new Error(`Request failed: ${e.message}`);
+	  }
     }
   }
 
